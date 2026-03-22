@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Naipunya - Why are both 168?</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Georgia, serif;
+            background: #faf8f3;
+            color: #2c2c2c;
+            padding: 40px 20px 120px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .journey {
+            max-width: 680px;
+            width: 100%;
+        }
+
+        /* PHASE BLOCKS */
+        .phase {
+            margin-bottom: 60px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .phase.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .phase-label {
+            font-size: 12px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #999;
+            margin-bottom: 12px;
+        }
+
+        .phase-title {
+            font-size: 22px;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        /* GRID */
+        .grid-area {
+            display: flex;
+            gap: 40px;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+
+        .grid-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .grid-title {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        canvas {
+            border: 2px solid #2c2c2c;
+            display: block;
+        }
+
+        .grid-area-label {
+            font-size: 14px;
+            color: #444;
+        }
+
+        /* EQUATION AREA */
+        .equation-block {
+            background: #fff;
+            border: 2px solid #2c2c2c;
+            padding: 24px 32px;
+            margin-top: 20px;
+            font-size: 20px;
+            line-height: 2;
+        }
+
+        .eq-line {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 8px;
+        }
+
+        .bracket-group {
+            display: inline-flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .term {
+            font-size: 22px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            position: relative;
+        }
+
+        .term.highlight-blue {
+            background: #bbdefb;
+        }
+
+        .term.highlight-green {
+            background: #c8e6c9;
+        }
+
+        .term.highlight-red {
+            background: #ef9a9a;
+        }
+
+        .term.highlight-yellow {
+            background: #fff9c4;
+        }
+
+        .term.cancelled {
+            text-decoration: line-through;
+            opacity: 0.4;
+        }
+
+        /* ARROW SVG */
+        .arrow-container {
+            position: relative;
+            margin: 16px 0;
+            min-height: 80px;
+        }
+
+        /* RESULT LINE */
+        .result-line {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 16px;
+            padding: 12px 0;
+            border-top: 2px solid #2c2c2c;
+        }
+
+        .result-line .highlight {
+            background: #fff9c4;
+            padding: 2px 8px;
+        }
+
+        /* GENERALISE */
+        .general-box {
+            background: #2c2c2c;
+            color: #faf8f3;
+            padding: 32px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .general-formula {
+            font-size: 32px;
+            letter-spacing: 2px;
+            margin-bottom: 16px;
+        }
+
+        .general-note {
+            font-size: 16px;
+            opacity: 0.8;
+        }
+
+        /* NEXT HINT */
+        .next-hint {
+            position: fixed;
+            bottom: 32px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2c2c2c;
+            color: #faf8f3;
+            padding: 12px 32px;
+            font-size: 15px;
+            font-family: Georgia, serif;
+            cursor: pointer;
+            border: none;
+            opacity: 0;
+            transition: opacity 0.5s;
+            z-index: 100;
+        }
+
+        .next-hint.visible {
+            opacity: 1;
+        }
+
+        .next-hint.done {
+            background: #2e7d32;
+        }
+
+        /* DIVIDER */
+        .divider {
+            border: none;
+            border-top: 1px solid #ddd;
+            margin: 40px 0;
+        }
+
+        /* STEP ARROW VISUAL */
+        .step-arrows {
+            margin: 20px 0;
+            padding: 20px;
+            background: #fff;
+            border: 1px solid #ddd;
+        }
+
+        .arrow-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            font-size: 18px;
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        .arrow-row.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .arrow-sym {
+            font-size: 20px;
+            color: #1565c0;
+        }
+
+        .arrow-result {
+            font-weight: bold;
+            font-size: 18px;
+            margin-left: auto;
+            padding: 4px 12px;
+            border-radius: 4px;
+        }
+
+        .result-blue {
+            background: #bbdefb;
+        }
+
+        .result-green {
+            background: #c8e6c9;
+        }
+
+        .result-red {
+            background: #ef9a9a;
+        }
+
+        .result-orange {
+            background: #ffe0b2;
+        }
+
+        .cancel-note {
+            font-size: 16px;
+            color: #c62828;
+            padding: 8px 0;
+            opacity: 0;
+            transition: opacity 0.4s;
+            border-top: 1px dashed #ddd;
+            margin-top: 8px;
+            padding-top: 12px;
+        }
+
+        .cancel-note.visible {
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="journey">
+
+        <!-- PHASE 1: Build 12×14 -->
+        <div class="phase visible" id="phase1">
+            <div class="phase-label">Step 1</div>
+            <div class="phase-title">12 × 14 = 168. Build it.</div>
+            <div class="grid-area">
+                <div class="grid-wrapper">
+                    <div class="grid-title">12 rows × 14 columns</div>
+                    <canvas id="canvas1" width="168" height="144"></canvas>
+                    <div class="grid-area-label">Each small square = 1 unit²</div>
+                </div>
+            </div>
+            <div class="equation-block">
+                <div class="eq-line">
+                    <span class="term highlight-green">12</span>
+                    <span>×</span>
+                    <span class="term highlight-green">14</span>
+                    <span>=</span>
+                    <span class="term highlight-yellow">168</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- PHASE 2: Rewrite sides -->
+        <div class="phase" id="phase2">
+            <div class="phase-label">Step 2</div>
+            <div class="phase-title">Rewrite 12 and 14 around their midpoint: 13</div>
+            <div class="equation-block">
+                <div class="eq-line">
+                    <span class="term highlight-green">12</span>
+                    <span>=</span>
+                    <span class="term highlight-blue">13 − 1</span>
+                </div>
+                <div class="eq-line">
+                    <span class="term highlight-green">14</span>
+                    <span>=</span>
+                    <span class="term highlight-blue">13 + 1</span>
+                </div>
+                <div class="eq-line" style="margin-top:12px; font-size:18px; color:#555;">
+                    So: 12 × 14 = (13 − 1)(13 + 1)
+                </div>
+            </div>
+        </div>
+
+        <!-- PHASE 3: Expand with arrows -->
+        <div class="phase" id="phase3">
+            <div class="phase-label">Step 3</div>
+            <div class="phase-title">Expand (13 − 1)(13 + 1) — term by term</div>
+
+            <div class="step-arrows" id="stepArrows">
+
+                <div class="arrow-row" id="arrow1">
+                    <span style="background:#bbdefb; padding:2px 8px; border-radius:3px;">①13</span>
+                    <span class="arrow-sym">→</span>
+                    <span style="background:#bbdefb; padding:2px 8px; border-radius:3px;">②13</span>
+                    <span style="color:#888; font-size:15px;">13 × 13</span>
+                    <span class="arrow-result result-blue">= 169</span>
+                </div>
+
+                <div class="arrow-row" id="arrow2">
+                    <span style="background:#bbdefb; padding:2px 8px; border-radius:3px;">①13</span>
+                    <span class="arrow-sym">→</span>
+                    <span style="background:#c8e6c9; padding:2px 8px; border-radius:3px;">②+1</span>
+                    <span style="color:#888; font-size:15px;">13 × 1</span>
+                    <span class="arrow-result result-green">= +13</span>
+                </div>
+
+                <div class="arrow-row" id="arrow3">
+                    <span style="background:#ef9a9a; padding:2px 8px; border-radius:3px;">①−1</span>
+                    <span class="arrow-sym">→</span>
+                    <span style="background:#bbdefb; padding:2px 8px; border-radius:3px;">②13</span>
+                    <span style="color:#888; font-size:15px;">−1 × 13</span>
+                    <span class="arrow-result result-red">= −13</span>
+                </div>
+
+                <div class="arrow-row" id="arrow4">
+                    <span style="background:#ef9a9a; padding:2px 8px; border-radius:3px;">①−1</span>
+                    <span class="arrow-sym">→</span>
+                    <span style="background:#c8e6c9; padding:2px 8px; border-radius:3px;">②+1</span>
+                    <span style="color:#888; font-size:15px;">−1 × 1</span>
+                    <span class="arrow-result result-orange">= −1</span>
+                </div>
+
+                <div class="cancel-note" id="cancelNote">
+                    ✕ +13 and −13 cancel each other out. They disappear.
+                </div>
+
+            </div>
+        </div>
+
+        <!-- PHASE 4: Result -->
+        <div class="phase" id="phase4">
+            <div class="phase-label">Step 4</div>
+            <div class="phase-title">What's left after cancellation?</div>
+            <div class="equation-block">
+                <div class="eq-line">
+                    (13 − 1)(13 + 1)
+                </div>
+                <div class="eq-line" style="font-size:16px;">
+                    = 169 +
+                    <span style="text-decoration:line-through; color:#c62828;">+13</span>
+                    <span style="text-decoration:line-through; color:#c62828;">− 13</span>
+                    − 1
+                </div>
+                <div class="eq-line" style="font-size:14px; color:#888; margin-top:-8px;">
+                    ↑ these cancel each other out
+                </div>
+                <div class="eq-line">
+                    = 169 − 1
+                </div>
+                <div class="result-line">
+                    = <span class="highlight">168</span> ✓
+                </div>
+            </div>
+
+            <!-- Verify with grid -->
+            <div class="grid-area" style="margin-top:24px;">
+                <div class="grid-wrapper">
+                    <div class="grid-title">13² − 1²</div>
+                    <canvas id="canvas2" width="156" height="156"></canvas>
+                    <div class="grid-area-label">Big square (169) minus corner (1) = 168</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PHASE 5: Generalise -->
+        <div class="phase" id="phase5">
+            <div class="phase-label">Step 5</div>
+            <div class="phase-title">Replace 13 with <em>a</em> and 1 with <em>b</em>. Does it still work?</div>
+            <div class="equation-block">
+                <div class="eq-line">
+                    (a − b)(a + b)
+                </div>
+                <div class="eq-line" style="color:#888; text-decoration:line-through; font-size:16px;">
+                    = a² + ab − ab − b²
+                </div>
+                <div class="eq-line">
+                    = a² − b²
+                </div>
+                <div class="result-line">
+                    Always. The middle terms always cancel.
+                </div>
+            </div>
+
+            <div class="general-box">
+                <div class="general-formula">(a − b)(a + b) = a² − b²</div>
+                <div class="general-note">
+                    This works for any two numbers a and b.<br>
+                    12 × 14 was just one instance of this pattern.
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- NEXT BUTTON -->
+    <button class="next-hint visible" id="nextBtn" onclick="nextStep()">
+        Click anywhere to continue ↓
+    </button>
+
+    <script>
+        // Draw grid 1: 12×14
+        const c1 = document.getElementById('canvas1');
+        const ctx1 = c1.getContext('2d');
+        const UNIT = 12;
+
+        for (let r = 0; r < 12; r++) {
+            for (let c = 0; c < 14; c++) {
+                ctx1.fillStyle = '#c8e6c9';
+                ctx1.fillRect(c * UNIT + 1, r * UNIT + 1, UNIT - 2, UNIT - 2);
+                ctx1.strokeStyle = '#aaa';
+                ctx1.lineWidth = 0.5;
+                ctx1.strokeRect(c * UNIT, r * UNIT, UNIT, UNIT);
+            }
+        }
+
+        // Draw grid 2: 13×13 minus 1×1
+        const c2 = document.getElementById('canvas2');
+        const ctx2 = c2.getContext('2d');
+
+        for (let r = 0; r < 13; r++) {
+            for (let c = 0; c < 13; c++) {
+                const isCorner = (r === 12 && c === 12);
+                ctx2.fillStyle = isCorner ? '#ef9a9a' : '#bbdefb';
+                ctx2.fillRect(c * UNIT + 1, r * UNIT + 1, UNIT - 2, UNIT - 2);
+                ctx2.strokeStyle = isCorner ? '#c62828' : '#aaa';
+                ctx2.lineWidth = isCorner ? 1.5 : 0.5;
+                ctx2.strokeRect(c * UNIT, r * UNIT, UNIT, UNIT);
+            }
+        }
+
+        // STEP SEQUENCING
+        // Steps: phase2, phase3-arrow1, arrow2, arrow3, arrow4, cancelNote, phase4, phase5
+        const steps = [
+            () => showPhase('phase2'),
+            () => showArrow('arrow1'),
+            () => showArrow('arrow2'),
+            () => showArrow('arrow3'),
+            () => showArrow('arrow4'),
+            () => document.getElementById('cancelNote').classList.add('visible'),
+            () => showPhase('phase4'),
+            () => {
+                showPhase('phase5');
+                // Change button to done state
+                const btn = document.getElementById('nextBtn');
+                btn.textContent = "Continue to Next Screen →";
+                btn.classList.add('done');
+                btn.onclick = () => window.location.href = 'naipunya_screen5.html';
+            }
+        ];
+
+        let currentStep = 0;
+
+        function nextStep() {
+            if (currentStep < steps.length) {
+                steps[currentStep]();
+                currentStep++;
+            }
+        }
+
+        function showPhase(id) {
+            const el = document.getElementById(id);
+            el.classList.add('visible');
+        }
+
+        function showArrow(id) {
+            // Make sure phase3 is visible first
+            document.getElementById('phase3').classList.add('visible');
+            const el = document.getElementById(id);
+            el.classList.add('visible');
+        }
+
+        // Click anywhere to advance
+        document.addEventListener('click', (e) => {
+            if (e.target.id !== 'nextBtn') {
+                nextStep();
+            }
+        });
+    </script>
+</body>
+
+</html>

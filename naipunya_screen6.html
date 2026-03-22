@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Naipunya - What's Next</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: Georgia, serif;
+            background: #2c2c2c;
+            color: #faf8f3;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .screen {
+            max-width: 560px;
+            width: 100%;
+            text-align: center;
+        }
+
+        /* ACHIEVEMENT */
+        .achievement {
+            opacity: 0;
+            animation: fadeIn 0.8s 0.3s forwards;
+        }
+
+        .achievement-label {
+            font-size: 12px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #888;
+            margin-bottom: 16px;
+        }
+
+        .achievement-title {
+            font-size: 28px;
+            line-height: 1.4;
+            margin-bottom: 8px;
+        }
+
+        .achievement-formula {
+            font-size: 22px;
+            background: #3a3a3a;
+            padding: 12px 24px;
+            display: inline-block;
+            margin: 16px 0;
+            letter-spacing: 1px;
+            color: #c8e6c9;
+        }
+
+        .achievement-note {
+            font-size: 15px;
+            color: #888;
+            margin-top: 8px;
+        }
+
+        /* DIVIDER */
+        .divider {
+            width: 40px;
+            height: 2px;
+            background: #444;
+            margin: 40px auto;
+            opacity: 0;
+            animation: fadeIn 0.6s 1.2s forwards;
+        }
+
+        /* CURIOSITY HOOK */
+        .hook {
+            opacity: 0;
+            animation: fadeIn 0.8s 1.6s forwards;
+            margin-bottom: 48px;
+        }
+
+        .hook-label {
+            font-size: 12px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #888;
+            margin-bottom: 20px;
+        }
+
+        .hook-question {
+            font-size: 24px;
+            line-height: 1.6;
+            margin-bottom: 24px;
+            color: #faf8f3;
+        }
+
+        .hook-question em {
+            color: #fff9c4;
+            font-style: normal;
+        }
+
+        /* VISUAL TEASER */
+        .teaser-box {
+            background: #3a3a3a;
+            padding: 28px;
+            margin: 24px 0;
+            text-align: left;
+        }
+
+        .teaser-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+            font-size: 18px;
+            opacity: 0;
+        }
+
+        .teaser-row.r1 { animation: slideIn 0.5s 2s forwards; }
+        .teaser-row.r2 { animation: slideIn 0.5s 2.4s forwards; }
+        .teaser-row.r3 { animation: slideIn 0.5s 2.8s forwards; }
+        .teaser-row.r4 { animation: slideIn 0.5s 3.2s forwards; }
+
+        .teaser-num {
+            font-size: 22px;
+            min-width: 48px;
+            text-align: right;
+            color: #bbdefb;
+        }
+
+        .teaser-eq {
+            color: #888;
+            font-size: 15px;
+        }
+
+        .teaser-pattern {
+            color: #fff9c4;
+            font-size: 15px;
+            margin-left: auto;
+        }
+
+        .teaser-mystery {
+            margin-top: 8px;
+            padding-top: 16px;
+            border-top: 1px solid #444;
+            font-size: 16px;
+            color: #888;
+            text-align: center;
+            opacity: 0;
+            animation: fadeIn 0.6s 3.8s forwards;
+        }
+
+        /* QUESTION MARK */
+        .big-question {
+            font-size: 64px;
+            margin: 32px 0 16px;
+            opacity: 0;
+            animation: fadeIn 0.8s 4.2s forwards;
+            color: #fff9c4;
+        }
+
+        .hook-sub {
+            font-size: 16px;
+            color: #888;
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: fadeIn 0.8s 4.6s forwards;
+        }
+
+        /* BUTTON */
+        .next-btn {
+            padding: 16px 56px;
+            font-size: 18px;
+            background: #faf8f3;
+            color: #2c2c2c;
+            border: none;
+            cursor: pointer;
+            font-family: Georgia, serif;
+            opacity: 0;
+            animation: fadeIn 0.8s 5s forwards;
+            transition: background 0.2s;
+        }
+
+        .next-btn:hover {
+            background: #fff9c4;
+        }
+
+        /* REST NOTE */
+        .rest-note {
+            margin-top: 24px;
+            font-size: 13px;
+            color: #555;
+            opacity: 0;
+            animation: fadeIn 0.6s 5.4s forwards;
+        }
+
+        /* ANIMATIONS */
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="screen">
+
+    <!-- WHAT YOU JUST DID -->
+    <div class="achievement">
+        <div class="achievement-label">Pattern unlocked</div>
+        <div class="achievement-title">You discovered this yourself.</div>
+        <div class="achievement-formula">(a − b)(a + b) = a² − b²</div>
+        <div class="achievement-note">
+            The middle terms always cancel. You proved it.
+        </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- CURIOSITY HOOK -->
+    <div class="hook">
+        <div class="hook-label">What's hiding next</div>
+        <div class="hook-question">
+            Every perfect square hides a pattern.<br>
+            Look at these numbers carefully.
+        </div>
+
+        <div class="teaser-box">
+            <div class="teaser-row r1">
+                <span class="teaser-num">1²</span>
+                <span>=</span>
+                <span>1</span>
+                <span class="teaser-pattern">difference: 3</span>
+            </div>
+            <div class="teaser-row r2">
+                <span class="teaser-num">2²</span>
+                <span>=</span>
+                <span>4</span>
+                <span class="teaser-pattern">difference: 5</span>
+            </div>
+            <div class="teaser-row r3">
+                <span class="teaser-num">3²</span>
+                <span>=</span>
+                <span>9</span>
+                <span class="teaser-pattern">difference: 7</span>
+            </div>
+            <div class="teaser-row r4">
+                <span class="teaser-num">4²</span>
+                <span>=</span>
+                <span>16</span>
+                <span class="teaser-pattern">difference: 9</span>
+            </div>
+            <div class="teaser-mystery">
+                The differences are 3, 5, 7, 9... Why always odd?
+            </div>
+        </div>
+
+        <div class="big-question">?</div>
+
+        <div class="hook-sub">
+            The answer connects directly to what you just learned.
+        </div>
+    </div>
+
+    <button class="next-btn" onclick="nextScreen()">
+        Show me →
+    </button>
+
+    <div class="rest-note">
+        You've been focused for a while. Take a breath before continuing.
+    </div>
+
+</div>
+
+<script>
+    function nextScreen() {
+        // Goes to (a+b)² identity
+        alert('Next: Why are the differences always odd? This leads directly to (a+b)² = a² + 2ab + b²');
+    }
+</script>
+</body>
+</html>
