@@ -1,1 +1,1 @@
-Nothing should be ignored based on the provided file changes. The only added file is `portfolio.html`, which appears to be a source file that should be tracked in version control. No build artifacts, dependencies, temporary files, or other ignorable content were detected in the changes.
+(index.html is a source file, so no files in the change list match the ignore patterns)
